@@ -1,0 +1,49 @@
+<% layout('layouts/boilerplate') %>
+
+<h2 class="mb-4">All Listings</h2>
+
+<% if (allListings.length === 0) { %>
+  <p class="text-muted">No listings available yet.</p>
+<% } else { %>
+
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+
+    <% for (let listing of allListings) { %>
+      <div class="col">
+
+        <div class="card h-100 shadow-sm position-relative">
+
+          <!-- Image -->
+          <img
+            src="<%= listing.image && listing.image.url ? listing.image.url : 'https://via.placeholder.com/400x300?text=No+Image' %>"
+            class="card-img-top"
+            alt="listing image"
+            style="height: 200px; object-fit: cover;"
+          >
+
+          <!-- Card body -->
+          <div class="card-body">
+            <h5 class="card-title"><%= listing.title %></h5>
+            <p class="card-text text-muted">
+              <%= listing.location %>, <%= listing.country %>
+            </p>
+            <p class="fw-bold">
+              ₹ <%= listing.price %> / night
+            </p>
+          </div>
+
+          <!-- Clickable card -->
+          <a
+            href="/listings/<%= listing._id %>"
+            class="stretched-link"
+            aria-label="View listing"
+          ></a>
+
+        </div>
+
+      </div>
+    <% } %>
+
+  </div>
+
+<% } %>

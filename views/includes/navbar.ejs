@@ -1,0 +1,71 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light airbnb-navbar fixed-top shadow-sm">
+  <div class="container-fluid px-4">
+
+    <!-- LOGO -->
+    <a class="navbar-brand airbnb-logo" href="/listings">
+      <i class="fa-brands fa-airbnb"></i>
+    </a>
+
+    <!-- TOGGLER -->
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+      aria-controls="navbarNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- NAV LINKS -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-3">
+
+        <li class="nav-item">
+          <a class="nav-link" href="/listings">Home</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/listings">All Listings</a>
+        </li>
+
+        <% if (currentUser) { %>
+          <!-- LOGGED IN USER -->
+
+          <li class="nav-item">
+            <a class="nav-link" href="/listings/new">New Listing</a>
+          </li>
+
+          <li class="nav-item">
+            <span class="nav-link fw-semibold">
+              Hi, <%= currentUser.username %>
+            </span>
+          </li>
+
+          <li class="nav-item">
+            <a class="btn airbnb-btn" href="/logout">Logout</a>
+          </li>
+
+        <% } else { %>
+          <!-- NOT LOGGED IN USER -->
+
+          <% if (currentPath !== "/login") { %>
+            <li class="nav-item">
+              <a class="btn airbnb-btn" href="/login">Login</a>
+            </li>
+          <% } %>
+
+          <% if (currentPath !== "/signup") { %>
+            <li class="nav-item">
+              <a class="btn airbnb-btn-outline" href="/signup">Signup</a>
+            </li>
+          <% } %>
+
+        <% } %>
+
+      </ul>
+    </div>
+  </div>
+</nav>

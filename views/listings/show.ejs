@@ -1,0 +1,174 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="row mt-5">
+
+  <!-- IMAGE -->
+  <div class="col-md-7 mb-4">
+    <img
+      src="<%= (Listing.image && Listing.image.url) ? Listing.image.url : 'https://via.placeholder.com/800x500?text=No+Image' %>"
+      class="img-fluid rounded shadow-sm"
+      alt="listing image"
+      style="height: 400px; width: 100%; object-fit: cover;"
+    >
+  </div>
+
+  <!-- DETAILS -->
+  <div class="col-md-5">
+
+    <h2 class="mb-2"><%= Listing.title %></h2>
+
+    <p class="text-muted mb-3">
+      <%= Listing.location %>, <%= Listing.country %>
+    </p>
+
+    <h4 class="mb-3">₹ <%= Listing.price %> / night</h4>
+
+    <hr>
+
+    <h5>Description</h5>
+    <p class="text-secondary">
+      <%= Listing.description %>
+    </p>
+
+    <hr>
+
+    <!-- LISTING ACTIONS (OWNER ONLY) -->
+    <% if (currentUser && Listing.owner && Listing.owner.equals(currentUser._id)) { %>
+      <div class="d-flex gap-3 mt-4">
+        <a
+          href="/listings/<%= Listing._id %>/edit"
+          class="btn btn-outline-secondary"
+        >
+          Edit
+        </a>
+
+        <form
+          action="/listings/<%= Listing._id %>?_method=DELETE"
+          method="POST"
+        >
+          <button type="submit" class="btn btn-outline-danger">
+            Delete
+          </button>
+        </form>
+      </div>
+    <% } %>
+
+  </div>
+</div>
+
+<!-- =========================
+     LEAVE A REVIEW
+========================= -->
+
+<hr class="my-5">
+
+<h4 class="mb-3">Leave a Review</h4>
+
+<% if (currentUser) { %>
+
+  <form
+    class="needs-validation"
+    novalidate
+    action="/listings/<%= Listing._id %>/reviews"
+    method="POST"
+  >
+
+    <!-- RATING -->
+    <div class="mb-3">
+      <label class="form-label">Rating</label>
+      <select class="form-select" name="review[rating]" required>
+        <option value="">Select rating</option>
+        <option value="1">⭐ 1</option>
+        <option value="2">⭐ 2</option>
+        <option value="3">⭐ 3</option>
+        <option value="4">⭐ 4</option>
+        <option value="5">⭐ 5</option>
+      </select>
+      <div class="invalid-feedback">
+        Please select a rating.
+      </div>
+    </div>
+
+    <!-- COMMENT -->
+    <div class="mb-3">
+      <label class="form-label">Comment</label>
+      <textarea
+        class="form-control"
+        name="review[comment]"
+        rows="3"
+        placeholder="Share your experience..."
+        required
+      ></textarea>
+      <div class="invalid-feedback">
+        Comment is required.
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-danger">
+      Submit Review
+    </button>
+
+  </form>
+
+<% } else { %>
+  <p class="text-muted">
+    <a href="/login">Login</a> to leave a review.
+  </p>
+<% } %>
+
+<!-- =========================
+     ALL REVIEWS
+========================= -->
+
+<hr class="my-5">
+
+<h4 class="mb-3">All Reviews</h4>
+
+<% if (!Listing.reviews || Listing.reviews.length === 0) { %>
+  <p class="text-muted">No reviews yet. Be the first to review!</p>
+<% } else { %>
+
+  <div class="list-group">
+    <% Listing.reviews.forEach(review => { %>
+      <div class="list-group-item mb-3 rounded shadow-sm">
+
+        <!-- STARS -->
+        <div class="mb-1">
+          <% for (let i = 0; i < review.rating; i++) { %>
+            ⭐
+          <% } %>
+        </div>
+
+        <!-- COMMENT -->
+        <p class="mb-1"><%= review.comment %></p>
+
+        <!-- DATE -->
+        <small class="text-muted">
+          <% if (review.createdAt) { %>
+            Posted on <%= review.createdAt.toDateString() %>
+          <% } %>
+        </small>
+
+        <!-- DELETE REVIEW (AUTHOR ONLY) -->
+        <% if (
+          currentUser &&
+          review.author &&
+          review.author._id &&
+          review.author._id.equals(currentUser._id)
+        ) { %>
+          <form
+            action="/listings/<%= Listing._id %>/reviews/<%= review._id %>?_method=DELETE"
+            method="POST"
+            class="mt-2"
+          >
+            <button class="btn btn-sm btn-danger">
+              Delete
+            </button>
+          </form>
+        <% } %>
+
+      </div>
+    <% }) %>
+  </div>
+
+<% } %>

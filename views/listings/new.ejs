@@ -1,0 +1,108 @@
+<% layout('layouts/boilerplate') %>
+
+<h2 class="mb-4">Create a New Listing</h2>
+
+<form
+  action="/listings"
+  method="POST"
+  class="needs-validation"
+  novalidate
+>
+
+  <!-- TITLE -->
+  <div class="mb-3">
+    <label class="form-label">Title</label>
+    <input
+      type="text"
+      name="title"
+      class="form-control"
+      placeholder="Enter listing title"
+      required
+    >
+    <div class="invalid-feedback">
+      Title is required.
+    </div>
+  </div>
+
+  <!-- DESCRIPTION -->
+  <div class="mb-3">
+    <label class="form-label">Description</label>
+    <textarea
+      name="description"
+      class="form-control"
+      rows="4"
+      placeholder="Describe your place"
+      required
+    ></textarea>
+    <div class="invalid-feedback">
+      Description is required.
+    </div>
+  </div>
+
+  <!-- IMAGE URL (FIXED) -->
+  <div class="mb-3">
+    <label class="form-label">Image URL</label>
+    <input
+      type="url"
+      name="image[url]"
+      class="form-control"
+      placeholder="https://example.com/image.jpg"
+      required
+    >
+    <div class="invalid-feedback">
+      Image URL is required.
+    </div>
+  </div>
+
+  <!-- PRICE -->
+  <div class="mb-3">
+    <label class="form-label">Price (per night)</label>
+    <input
+      type="number"
+      name="price"
+      class="form-control"
+      placeholder="Enter price"
+      required
+      min="1"
+    >
+    <div class="invalid-feedback">
+      Price is required.
+    </div>
+  </div>
+
+  <!-- COUNTRY -->
+  <div class="mb-3">
+    <label class="form-label">Country</label>
+    <input
+      type="text"
+      name="country"
+      class="form-control"
+      placeholder="Enter country"
+      required
+    >
+    <div class="invalid-feedback">
+      Country is required.
+    </div>
+  </div>
+
+  <!-- LOCATION -->
+  <div class="mb-4">
+    <label class="form-label">Location</label>
+    <input
+      type="text"
+      name="location"
+      class="form-control"
+      placeholder="City / Area"
+      required
+    >
+    <div class="invalid-feedback">
+      Location is required.
+    </div>
+  </div>
+
+  <!-- SUBMIT -->
+  <button type="submit" class="btn btn-danger">
+    Create Listing
+  </button>
+
+</form>

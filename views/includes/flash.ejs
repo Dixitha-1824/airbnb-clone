@@ -1,0 +1,31 @@
+<% if (success && success.length) { %>
+  <% success.forEach(msg => { %>
+    <div class="custom-alert success-alert">
+      <i class="fa-solid fa-circle-check"></i>
+      <span><%= msg %></span>
+      <button
+        type="button"
+        class="close-btn"
+        onclick="this.parentElement.remove()"
+      >
+        ×
+      </button>
+    </div>
+  <% }) %>
+<% } %>
+
+<% if (error && error.length) { %>
+  <% error.forEach(msg => { %>
+    <div class="custom-alert error-alert">
+      <i class="fa-solid fa-circle-exclamation"></i>
+      <span><%= msg %></span>
+      <button
+        type="button"
+        class="close-btn"
+        onclick="this.parentElement.remove()"
+      >
+        ×
+      </button>
+    </div>
+  <% }) %>
+<% } %>
