@@ -20,16 +20,12 @@ const {
   isListingOwner,
 } = require("./middleware");
 
-/* ======================
-   MIDDLEWARE
-====================== */
+/* MIDDLEWARE */
 app.use(methodOverride("_method"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
-/* ======================
-   DATABASE
-====================== */
+/* DATABASE */
 async function main() {
   await mongoose.connect(process.env.MONGO_URL);
 }
@@ -37,16 +33,12 @@ main()
   .then(() => console.log("Connected to DB"))
   .catch(err => console.log(err));
 
-/* ======================
-   VIEW ENGINE
-====================== */
+/* VIEW ENGINE */
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.engine("ejs", ejsMate);
 
-/* ======================
-   SESSION & FLASH
-====================== */
+/* SESSION & FLASH */
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -57,9 +49,7 @@ app.use(
 
 app.use(flash());
 
-/* ======================
-   PASSPORT CONFIG
-====================== */
+/* PASSPORT CONFIG */
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -67,9 +57,7 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-/* ======================
-   GLOBAL VARIABLES
-====================== */
+/* GLOBAL VARIABLES */
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
@@ -78,17 +66,12 @@ app.use((req, res, next) => {
   next();
 });
 
-/* ======================
-   ROUTES
-====================== */
-
+/* ROUTES */
 app.get("/", (req, res) => {
   res.redirect("/listings");
 });
 
-/* -------- LISTINGS -------- */
-
-// INDEX
+/* LISTINGS */
 app.get(
   "/listings",
   wrapAsync(async (req, res) => {
@@ -97,32 +80,25 @@ app.get(
   })
 );
 
-// NEW FORM
 app.get("/listings/new", isLoggedIn, (req, res) => {
   res.render("listings/new");
 });
 
-// CREATE
 app.post(
   "/listings",
   isLoggedIn,
   wrapAsync(async (req, res) => {
-
     const listing = new Listing({
       title: req.body.title,
       description: req.body.description,
       price: req.body.price,
       location: req.body.location,
       country: req.body.country,
-
-      // ✅ owner MUST be set here
       owner: req.user._id,
-
-      // temporary image (until Cloudinary)
       image: {
         url: "https://via.placeholder.com/800",
-        filename: "placeholder"
-      }
+        filename: "placeholder",
+      },
     });
 
     await listing.save();
@@ -132,9 +108,6 @@ app.post(
   })
 );
 
-
-
-// SHOW
 app.get(
   "/listings/:id",
   wrapAsync(async (req, res) => {
@@ -161,7 +134,6 @@ app.get(
   })
 );
 
-// EDIT FORM
 app.get(
   "/listings/:id/edit",
   isLoggedIn,
@@ -172,7 +144,6 @@ app.get(
   })
 );
 
-// UPDATE
 app.put(
   "/listings/:id",
   isLoggedIn,
@@ -184,7 +155,6 @@ app.put(
   })
 );
 
-// DELETE
 app.delete(
   "/listings/:id",
   isLoggedIn,
@@ -196,9 +166,7 @@ app.delete(
   })
 );
 
-/* -------- REVIEWS -------- */
-
-// CREATE REVIEW
+/* REVIEWS */
 app.post(
   "/listings/:id/reviews",
   isLoggedIn,
@@ -217,7 +185,6 @@ app.post(
   })
 );
 
-// DELETE REVIEW
 app.delete(
   "/listings/:id/reviews/:reviewId",
   isLoggedIn,
@@ -236,9 +203,7 @@ app.delete(
   })
 );
 
-/* -------- AUTH -------- */
-
-// SIGNUP
+/* AUTH */
 app.get("/signup", (req, res) => {
   res.render("users/signup");
 });
@@ -271,7 +236,6 @@ app.post("/signup", async (req, res, next) => {
   }
 });
 
-// LOGIN
 app.get("/login", (req, res) => {
   res.render("users/login");
 });
@@ -288,7 +252,6 @@ app.post(
   }
 );
 
-// LOGOUT
 app.get("/logout", isLoggedIn, (req, res, next) => {
   req.logout(err => {
     if (err) return next(err);
@@ -297,9 +260,7 @@ app.get("/logout", isLoggedIn, (req, res, next) => {
   });
 });
 
-/* ======================
-   ERROR HANDLER
-====================== */
+/* ERROR HANDLER */
 app.use((err, req, res, next) => {
   console.error(err);
 
@@ -312,9 +273,7 @@ app.use((err, req, res, next) => {
   res.redirect("/listings");
 });
 
-/* ======================
-   SERVER
-====================== */
+/* SERVER */
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
