@@ -39,7 +39,7 @@ const listingSchema = new mongoose.Schema({
     trim: true
   },
 
-  // ✅ FIXED: array of reviews
+ 
   reviews: [
     {
       type: mongoose.Schema.Types.ObjectId,

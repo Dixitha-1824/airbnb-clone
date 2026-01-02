@@ -2,7 +2,7 @@
 
 <div class="row mt-5">
 
-  <!-- IMAGE -->
+ 
   <div class="col-md-7 mb-4">
     <img
       src="<%= (Listing.image && Listing.image.url) ? Listing.image.url : 'https://via.placeholder.com/800x500?text=No+Image' %>"
@@ -12,7 +12,6 @@
     >
   </div>
 
-  <!-- DETAILS -->
   <div class="col-md-5">
 
     <h2 class="mb-2"><%= Listing.title %></h2>
@@ -32,7 +31,6 @@
 
     <hr>
 
-    <!-- LISTING ACTIONS (OWNER ONLY) -->
     <% if (currentUser && Listing.owner && Listing.owner.equals(currentUser._id)) { %>
       <div class="d-flex gap-3 mt-4">
         <a
@@ -56,9 +54,7 @@
   </div>
 </div>
 
-<!-- =========================
-     LEAVE A REVIEW
-========================= -->
+
 
 <hr class="my-5">
 
@@ -73,7 +69,7 @@
     method="POST"
   >
 
-    <!-- RATING -->
+   
     <div class="mb-3">
       <label class="form-label">Rating</label>
       <select class="form-select" name="review[rating]" required>
@@ -89,7 +85,7 @@
       </div>
     </div>
 
-    <!-- COMMENT -->
+  
     <div class="mb-3">
       <label class="form-label">Comment</label>
       <textarea
@@ -116,9 +112,7 @@
   </p>
 <% } %>
 
-<!-- =========================
-     ALL REVIEWS
-========================= -->
+
 
 <hr class="my-5">
 
@@ -132,24 +126,23 @@
     <% Listing.reviews.forEach(review => { %>
       <div class="list-group-item mb-3 rounded shadow-sm">
 
-        <!-- STARS -->
+     
         <div class="mb-1">
           <% for (let i = 0; i < review.rating; i++) { %>
             ⭐
           <% } %>
         </div>
 
-        <!-- COMMENT -->
         <p class="mb-1"><%= review.comment %></p>
 
-        <!-- DATE -->
+       
         <small class="text-muted">
           <% if (review.createdAt) { %>
             Posted on <%= review.createdAt.toDateString() %>
           <% } %>
         </small>
 
-        <!-- DELETE REVIEW (AUTHOR ONLY) -->
+        <!-- DELETE REVIEW -->
         <% if (
           currentUser &&
           review.author &&
